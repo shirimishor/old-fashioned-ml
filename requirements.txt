@@ -1,2 +1,9 @@
 ipykernel
 python-dotenv
+matplotlib
+numpy
+torch
+torchvision
+tqdm
+requests
+
