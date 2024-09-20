@@ -1,5 +1,10 @@
 import requests
 from met_dataset import save_images
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+import src.config
+
 
 
 def get_images_va(decade_start, decade_end):
@@ -51,14 +56,14 @@ def get_images_va(decade_start, decade_end):
     return image_data
 
 
+if __name__ == "__main__":
+    all_images = []
 
-all_images = []
+    for decade in range(1830, 1970, 10):
+        decade_start = decade
+        decade_end = decade + 9
+        image_data = get_images_va(decade_start, decade_end)
+        save_images(image_data, src.config.VA_DATA_DIR, decade)
+        all_images.extend(image_data)
 
-for decade in range(1830, 1970, 10):
-  decade_start = decade
-  decade_end = decade + 9
-  image_data = get_images_va(decade_start, decade_end)
-  save_images(image_data, "data/raw/VA_collection", decade)
-  all_images.extend(image_data)
-
-print(len(all_images))
+    print(f"Saved {len(all_images)} images to {src.config.VA_DATA_DIR}.")  

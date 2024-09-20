@@ -2,6 +2,12 @@ import os
 import requests
 import time
 
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
+import src.config
+
+
 # URL for the Met Collection API
 base_url = "https://collectionapi.metmuseum.org/public/collection/v1"
 
@@ -98,15 +104,15 @@ def save_images(image_data, folder_name, decade):
         print(f"Saved: {image_name}")
 
 
-all_images = []
+if __name__ == "__main__":
+    all_images = []
 
-for decade in range(1830, 1970, 10):
-  decade_start = decade
-  decade_end = decade + 9
-  image_data = get_images_met(decade_start, decade_end)
-  output_dir = "data/raw/met_collection"
-  save_images(image_data, output_dir, decade)
-  all_images.extend(image_data)
+    for decade in range(1830, 1970, 10):
+        decade_start = decade
+        decade_end = decade + 9
+        image_data = get_images_met(decade_start, decade_end)
+        save_images(image_data, src.config.MET_DATA_DIR, decade)
+        all_images.extend(image_data)
 
-print(f"Saved {len(all_images)} images to {output_dir}.")  
+    print(f"Saved {len(all_images)} images to {src.config.MET_DATA_DIR}.")  
 
