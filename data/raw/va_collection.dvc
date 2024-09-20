@@ -1,0 +1,6 @@
+outs:
+- md5: aa21d142853dd3b6a8c6fd80cb86b25e.dir
+  size: 348733524
+  nfiles: 651
+  hash: md5
+  path: va_collection

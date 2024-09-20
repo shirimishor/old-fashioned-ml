@@ -3,7 +3,7 @@ from met_dataset import save_images
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-import src.config
+import config.config
 
 
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         decade_start = decade
         decade_end = decade + 9
         image_data = get_images_va(decade_start, decade_end)
-        save_images(image_data, src.config.VA_DATA_DIR, decade)
+        save_images(image_data, config.config.VA_DATA_DIR, decade)
         all_images.extend(image_data)
 
-    print(f"Saved {len(all_images)} images to {src.config.VA_DATA_DIR}.")  
+    print(f"Saved {len(all_images)} images to {config.config.VA_DATA_DIR}.")  

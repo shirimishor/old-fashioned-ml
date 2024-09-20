@@ -3,7 +3,7 @@ import shutil
 
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-import src.config
+import config.config
 
 
 def merge_datasets(source_dir1, source_dir2, merged_dir):
@@ -36,7 +36,7 @@ def merge_datasets(source_dir1, source_dir2, merged_dir):
 
 if __name__ == "__main__":
     # Ensure the merged directory exists
-    if not os.path.exists(src.config.DATASET_DIR):
-        os.makedirs(src.config.DATASET_DIR)
+    if not os.path.exists(config.config.DATASET_DIR):
+        os.makedirs(config.config.DATASET_DIR)
 
-    merge_datasets(src.config.MET_DATA_DIR, src.config.VA_DATA_DIR, src.config.DATASET_DIR)
+    merge_datasets(config.config.MET_DATA_DIR, config.config.VA_DATA_DIR, config.config.DATASET_DIR)

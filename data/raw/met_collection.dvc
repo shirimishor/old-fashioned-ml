@@ -1,0 +1,6 @@
+outs:
+- md5: 753dfa5d281d3aa32caa02c8dfb55426.dir
+  size: 319865450
+  nfiles: 442
+  hash: md5
+  path: met_collection
