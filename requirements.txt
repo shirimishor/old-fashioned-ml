@@ -6,4 +6,6 @@ torch
 torchvision
 tqdm
 requests
+albumentations
+opencv-python
 

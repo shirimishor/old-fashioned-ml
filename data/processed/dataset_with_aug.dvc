@@ -1,0 +1,6 @@
+outs:
+- md5: c7964b7a6a801127ed974d5fc6e715e8.dir
+  size: 1001436830
+  nfiles: 2170
+  hash: md5
+  path: dataset_with_aug

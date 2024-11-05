@@ -26,6 +26,7 @@ def loss_weights(loader):
     return class_weights_tensor
 
 
+
 net = Net(len(class_names))
 
 

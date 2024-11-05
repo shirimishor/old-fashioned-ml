@@ -39,4 +39,10 @@ if __name__ == "__main__":
     if not os.path.exists(config.config.DATASET_DIR):
         os.makedirs(config.config.DATASET_DIR)
 
-    merge_datasets(config.config.MET_DATA_DIR, config.config.VA_DATA_DIR, config.config.DATASET_DIR)
+    #merge_datasets(config.config.MET_DATA_DIR, config.config.VA_DATA_DIR, config.config.DATASET_DIR)
+    # Ensure the merged directory exists
+    if not os.path.exists(config.config.DATA_WITH_AUG_DIR):
+        os.makedirs(config.config.DATA_WITH_AUG_DIR)
+    
+    merge_datasets(config.config.AUG_DIR, config.config.DATASET_DIR, config.config.DATA_WITH_AUG_DIR)
+
