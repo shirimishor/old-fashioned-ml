@@ -1,64 +1,54 @@
 import torch
-import torch.nn as nn
 import torch.optim as optim
-from tqdm import tqdm # progress bar
-from collections import Counter
-from model import Net
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+from torch import nn
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-from src.dataset.pytorch_dataset import class_names, train_loader
+from src.modeling.model import Net
+from src.dataset.pytorch_dataset import train_loader, class_names, train_set
+import config.config
+import tqdm
+
+# Set the best hyperparameters from Ray Tune
+best_config = {
+    'lr': 0.07213821593952946,
+    'momentum': 0.41978204223494453,
+    'epochs': 5
+}
+
+# Prepare the data
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+])
+
+train_dataset = datasets.ImageFolder(root=os.path.normpath(config.config.DATASET_DIR), transform=transform)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+
+# Initialize the model and optimizer
+model = Net(len(class_names))
+optimizer = optim.SGD(model.parameters(), lr=best_config['lr'], momentum=best_config['momentum'])
+
+# Loss function
+criterion = nn.CrossEntropyLoss()
+
+# Train the model
+
+for epoch in range(best_config['epochs']):
+    model.train()
+    running_loss = 0.0
+    for i, data in enumerate(train_loader, 0):
+        inputs, labels = data
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+    print(f"Epoch [{epoch + 1}/{best_config['epochs']}], Loss: {running_loss / len(train_loader):.4f}")
 
 
-
-def loss_weights(loader):
-    class_counts = Counter()
-
-    for _, labels in loader:
-        class_counts.update(labels.tolist())
-
-    # Get the total number of samples
-    total_samples = sum(class_counts.values())
-
-    # Compute class weights
-    class_weights = {class_id: total_samples / count for class_id, count in class_counts.items()}
-    class_weights_tensor = torch.tensor([class_weights[i] for i in range(len(class_counts))])
-    return class_weights_tensor
-
-
-
-net = Net(len(class_names))
-
-
-criterion = nn.CrossEntropyLoss(weight=loss_weights(train_loader))
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-
-
-if __name__ == "__main__":
-    print("starting training...")
-    for epoch in range(5):  # loop over the dataset multiple times
-        running_loss = 0.0
-        # Use tqdm to wrap the DataLoader for progress tracking
-        for i, data in enumerate(tqdm(train_loader, desc=f"Epoch {epoch+1} Progress")):
-            # get the inputs; data is a list of [inputs, labels]
-            inputs, labels = data
-
-            # zero the parameter gradients
-            optimizer.zero_grad()
-
-            # forward + backward + optimize
-            outputs = net(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-
-            # accumulate the running loss
-            running_loss += loss.item()
-
-        print(f'[{epoch + 1}, {i + 1}] loss: {running_loss / 28:.3f}')
-
-    print('Finished Training')
-
-    # Saving the model as a dictionary
-    torch.save(net.state_dict(), "models/nn1.pth")
+model.eval()
 

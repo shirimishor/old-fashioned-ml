@@ -1,9 +1,8 @@
 import os
 import shutil
-
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-import config.config
+
 
 
 def merge_datasets(source_dir1, source_dir2, merged_dir):
@@ -32,17 +31,4 @@ def merge_datasets(source_dir1, source_dir2, merged_dir):
     # Copy contents of both source directories into the merged directory
     copy_contents(source_dir1, merged_dir)
     copy_contents(source_dir2, merged_dir)
-
-
-if __name__ == "__main__":
-    # Ensure the merged directory exists
-    if not os.path.exists(config.config.DATASET_DIR):
-        os.makedirs(config.config.DATASET_DIR)
-
-    #merge_datasets(config.config.MET_DATA_DIR, config.config.VA_DATA_DIR, config.config.DATASET_DIR)
-    # Ensure the merged directory exists
-    if not os.path.exists(config.config.DATA_WITH_AUG_DIR):
-        os.makedirs(config.config.DATA_WITH_AUG_DIR)
-    
-    merge_datasets(config.config.AUG_DIR, config.config.DATASET_DIR, config.config.DATA_WITH_AUG_DIR)
 

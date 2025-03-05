@@ -1,9 +1,9 @@
 # File paths
-MET_DATA_DIR = "data/raw/met_collection"
-VA_DATA_DIR = "data/raw/va_collection"
-DATASET_DIR = "data/interim/dataset"
-AUG_DIR = "data/interim/augmented"
-DATA_WITH_AUG_DIR = "data/processed/dataset_with_aug"
+MET_DATA_DIR = r"C:\old-fashioned-ml\data\raw\met_collection"
+VA_DATA_DIR = r"C:\old-fashioned-ml\data\raw\va_collection"
+DATASET_DIR = "C:\old-fashioned-ml\data\interim\dataset"
+AUG_DIR = r"C:\old-fashioned-ml\data\interim\augmented"
+DATA_WITH_AUG_DIR = "C:\old-fashioned-ml\data\processed\dataset_with_aug"
 
 
 # Data transformation

@@ -5,14 +5,15 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
 import config.config
 
+# Creating dataset: gathering images from the Victoria & Albert Museum collection
 
+# URL for the V&A Collection API
+va_base_url = "https://api.vam.ac.uk/v2/objects/search"
 
 def get_images_va(decade_start, decade_end):
-    va_base_url = "https://api.vam.ac.uk/v2/objects/search"
     image_data = []
     unique_object_ids = set()
     duplicates = 0
-
 
     types = ["Dress", "Waistcoat", "Blouse", "Jacket", "Shawl"]
 
@@ -57,6 +58,10 @@ def get_images_va(decade_start, decade_end):
 
 
 if __name__ == "__main__":
+
+    # Collecting data from V&A
+    # decade range: 1830-1960 
+
     all_images = []
 
     for decade in range(1830, 1970, 10):

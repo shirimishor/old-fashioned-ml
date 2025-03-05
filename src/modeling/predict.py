@@ -1,16 +1,21 @@
-from model import Net
 import torch
+from model import Net
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
-from src.dataset.pytorch_dataset import test_loader, class_names
+from src.dataset.pytorch_dataset import class_names, test_set
+from torch.utils.data import DataLoader
+
 
 if __name__ == "__main__":
     print("Loading model...")
-    model = Net(len(class_names))
-    model.load_state_dict(torch.load("models/nn1.pth", weights_only=True))
+    model = Net(256, 64)
+    print(model.fc3)
+    model.load_state_dict(torch.load(r"C:\old-fashioned-ml\models\nn5.pth"))
     model.eval()
     print("Model loaded")
+    test_loader = DataLoader(test_set, batch_size=32, shuffle=True)
+
 
     correct = 0
     total = 0
@@ -48,3 +53,5 @@ with torch.no_grad():
 for classname, correct_count in correct_pred.items():
     accuracy = 100 * float(correct_count) / total_pred[classname]
     print(f'Accuracy for class: {classname:5s} is {accuracy:.1f} %')
+
+    

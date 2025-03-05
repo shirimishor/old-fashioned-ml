@@ -1,17 +1,16 @@
 import os
 import requests
-import time
-
-import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__),'../../'))
 import config.config
+
+# Creating dataset: gathering images from the MET collection
 
 
 # URL for the Met Collection API
 base_url = "https://collectionapi.metmuseum.org/public/collection/v1"
 
-# Function to get objects from the Met's Costume Institute by decade
+# Function to get images from the Met's Costume Institute by decade
 def get_images_met(decade_start, decade_end):
     search_url = f"{base_url}/search"
     queries = ["dress", "corset", "bodice", "vest", "suit", "waistcoat", "trousers", "coat", "skirt", "cape", "underwear"]
@@ -28,7 +27,7 @@ def get_images_met(decade_start, decade_end):
             "dateBegin": decade_start,
             "dateEnd": decade_end,
             "hasImage": True,
-            "medium": "Cotton" or "Silk" or "Wool" or "Linen",
+            "medium": "Cotton" or "Silk" or "Wool" or "Linen", # Filtering unwanted objects that aren't clothes 
             "q": query,
         }
 
@@ -57,7 +56,6 @@ def get_images_met(decade_start, decade_end):
     obj_with_img = 0
 
     # Fetch image url for each object id
-    # Limit to 80 requests per sec - api max handling
     for obj_id in object_ids:
         object_url = f"{base_url}/objects/{obj_id}"
         obj_response = requests.get(object_url)
@@ -73,27 +71,20 @@ def get_images_met(decade_start, decade_end):
             image_data.append(image_info)
             obj_with_img += 1
 
-
-        request_count += 1
-
-        if request_count % 80 == 0:
-            time.sleep(1)  
     print(f"Total complete entries to save: {obj_with_img}")
     return image_data
 
 
 
 
-# Save images to a local folder
+# Function to save images to a local folder in dataset scheme
 def save_images(image_data, folder_name, decade):
     folder_name = f"{folder_name}/{decade}s"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
     for idx, item in enumerate(image_data):
-
         image_url = item['primaryImage']
-
         image_name = f"{folder_name}/{idx}_{item['objectID']}.jpg"
 
         # Download the image
@@ -103,8 +94,25 @@ def save_images(image_data, folder_name, decade):
 
         print(f"Saved: {image_name}")
 
+'''
+Expected form of created directory:
+├── met_collection
+│   ├── 1930s 
+│   │   ├── 0_65433.jpg
+│   │   ├── 1_34546.jpg
+│   │   └── ...
+│   ├── 1940s
+│   ├── 1950s
+│   ├── 1960s
+│   └── ...
+
+'''
+
 
 if __name__ == "__main__":
+    
+    # Collecting data from MET
+    # decade range: 1830-1960  
     all_images = []
 
     for decade in range(1830, 1970, 10):
